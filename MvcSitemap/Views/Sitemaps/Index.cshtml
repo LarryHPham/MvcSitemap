@@ -9,11 +9,11 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form method="post" enctype="multipart/form-data" asp-controller="UploadFiles" asp-action="Index">
+<form id="uploadForm" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <div class="col-md-10">
             <p>Upload one or more files using this form:</p>
-            <input type="file" name="files" multiple accept=".xml"/>
+            <input id="fileInput" type="file" name="files" multiple accept=".xml"/>
         </div>
     </div>
     <div class="form-group">

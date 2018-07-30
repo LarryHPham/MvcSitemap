@@ -202,15 +202,16 @@ namespace MvcSitemap.Controllers
 
             //Read the XML File  
             xmlDocument.Load("https://www.speedycash.com/sitemap.xml");
+            XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
+            nsmgr.AddNamespace("x", xmlDocument.DocumentElement.NamespaceURI);
 
             //Create a XML Node List with XPath Expression  
-            XmlNodeList xmlNodeList = xmlDocument.GetElementsByTagName("/urlset/url");
+            XmlNodeList xmlNodeList = xmlDocument.SelectNodes("/x:urlset/x:url", nsmgr);
 
             List<XMLSitemap> infos = new List<XMLSitemap>();
-
+            XMLSitemap one;
             foreach (XmlNode xmlNode in xmlNodeList)
             {
-                Console.WriteLine(xmlNode);
                 XMLSitemap info = new XMLSitemap
                 {
                     Url = xmlNode["loc"].InnerText,
@@ -218,10 +219,11 @@ namespace MvcSitemap.Controllers
                     ChangeFrequency = xmlNode["changefreq"].InnerText,
                     Priority = xmlNode["priority"].InnerText
                 };
+                one = info;
                 infos.Add(info);
             }
             
-            return Ok(new {content = infos});
+            return Ok(new { xmlData = infos });
         }
     }
 }
