@@ -26,7 +26,9 @@ namespace MvcSitemap.Controllers
         // GET: Sitemaps
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Sitemap.ToListAsync());
+            var data = await _context.Sitemap.ToListAsync();
+            ViewBag.Data = data;
+            return View(data);
         }
 
         // GET: Sitemaps/Details/5

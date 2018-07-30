@@ -4,6 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
+<script>
+    var siteMap = @Html.Raw(JsonConvert.SerializeObject(Model));
+    console.log(siteMap);
+</script>
+
 <h2>Index</h2>
 
 <p>
