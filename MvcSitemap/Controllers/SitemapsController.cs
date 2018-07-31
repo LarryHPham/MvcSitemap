@@ -197,7 +197,10 @@ namespace MvcSitemap.Controllers
         public IActionResult Post(IFormFile file)
         {
             // full path to file in temp location
-            var filePath = Path.GetTempFileName();
+           	var tempPath = Path.GetTempPath();
+			var fileName = Guid.NewGuid().ToString() + ".xml";
+			var filePath = Path.Combine(tempPath, fileName);
+			Console.WriteLine($"filePath =========================> {filePath}");
            
             //Create A XML Document Of Response String  
             XmlDocument xmlDocument = new XmlDocument();
