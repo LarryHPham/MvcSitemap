@@ -31,10 +31,10 @@ $(function () {
 
         // check the original data to help set the flag of the siteMapArray for status
         siteMapArray.forEach(sitemap => {
-            const status = 'new';
+            string status = 'new';//??? why do you use type constant in here?
 
             originalData.forEach(originalSite => {
-                if (sitemap.url !== originalData.Url) return;
+                if (sitemap.url !== originalSite.Url) return;
                 originalSite.status = 'edit';
                 status = 'edit';
             })
