@@ -12218,23 +12218,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {},
+    "C:\\Users\\larry\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Documents\\Visual Studio 2017\\Projects\\MvcSitemap\\MvcSitemap\\MvcSitemap.csproj",
+      "projectUniqueName": "C:\\Users\\larry\\Desktop\\Unity\\MvcSitemap\\MvcSitemap\\MvcSitemap.csproj",
       "projectName": "MvcSitemap",
-      "projectPath": "C:\\Users\\User\\Documents\\Visual Studio 2017\\Projects\\MvcSitemap\\MvcSitemap\\MvcSitemap.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Documents\\Visual Studio 2017\\Projects\\MvcSitemap\\MvcSitemap\\obj\\",
+      "projectPath": "C:\\Users\\larry\\Desktop\\Unity\\MvcSitemap\\MvcSitemap\\MvcSitemap.csproj",
+      "packagesPath": "C:\\Users\\larry\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\larry\\Desktop\\Unity\\MvcSitemap\\MvcSitemap\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\larry\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
