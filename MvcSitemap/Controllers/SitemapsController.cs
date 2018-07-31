@@ -211,7 +211,6 @@ namespace MvcSitemap.Controllers
             XmlNodeList xmlNodeList = xmlDocument.SelectNodes("/x:urlset/x:url", nsmgr);
 
             List<XMLSitemap> infos = new List<XMLSitemap>();
-            XMLSitemap one;
             foreach (XmlNode xmlNode in xmlNodeList)
             {
                 XMLSitemap info = new XMLSitemap
@@ -221,7 +220,6 @@ namespace MvcSitemap.Controllers
                     ChangeFrequency = xmlNode["changefreq"].InnerText,
                     Priority = xmlNode["priority"].InnerText
                 };
-                one = info;
                 infos.Add(info);
             }
             
