@@ -10,6 +10,7 @@ $(function () {
             data: formData,
             async: false,
             success: function (data) {
+            	console.log('ajax', data);
                 xmlCompare(data.xmlData, siteMapOriginal);
             },
             cache: false,
@@ -34,7 +35,10 @@ $(function () {
             string status = 'new';//??? why do you use type constant in here?
 
             originalData.forEach(originalSite => {
-                if (sitemap.url !== originalSite.Url) return;
+                if (sitemap.url !== originalData.Url) {
+                    if (!originalSite.status) originalSite.status = 'deleted';
+                    return;
+                }
                 originalSite.status = 'edit';
                 status = 'edit';
             })

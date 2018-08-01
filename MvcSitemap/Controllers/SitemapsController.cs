@@ -194,10 +194,11 @@ namespace MvcSitemap.Controllers
         }
 
         [HttpPost("UploadFiles")]
-        public IActionResult Post(IFormFile file)
+        public async Task<IActionResult> Post(IFormFile file)
         {
             // full path to file in temp location
            	var tempPath = Path.GetTempPath();
+           	var originalData = await _context.Sitemap.ToListAsync();
 			var fileName = Guid.NewGuid().ToString() + ".xml";
 			var filePath = Path.Combine(tempPath, fileName);
 			Console.WriteLine($"filePath =========================> {filePath}");
@@ -221,12 +222,17 @@ namespace MvcSitemap.Controllers
                     Url = xmlNode["loc"].InnerText,
                     CreatedDate = xmlNode["lastmod"].InnerText,
                     ChangeFrequency = xmlNode["changefreq"].InnerText,
-                    Priority = xmlNode["priority"].InnerText
+                    Priority = xmlNode["priority"].InnerText,
+                    Status = "new"
                 };
                 infos.Add(info);
             }
-            
-            return Ok(new { xmlData = infos });
+            // generate arrays of edited items, deleted items, and new items
+            var deleteArray = originalData.Where(o => infos.Any(i => o.Url == i.Url));
+            var editArray = infos.Where(o => originalData.Any(i => o.Url == i.Url));
+            var newArray = infos.Where(i => !originalData.Any(o => i.Url == o.Url));
+
+            return Ok(new { xmlData = infos, newArray = newArray, editArray = editArray, deleteArray = deleteArray });
         }
     }
 }
