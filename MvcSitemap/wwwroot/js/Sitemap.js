@@ -32,7 +32,7 @@ $(function () {
 
         // check the original data to help set the flag of the siteMapArray for status
         siteMapArray.forEach(sitemap => {
-            string status = 'new';//??? why do you use type constant in here?
+            let status = 'new';
 
             originalData.forEach(originalSite => {
                 if (sitemap.url !== originalData.Url) {
