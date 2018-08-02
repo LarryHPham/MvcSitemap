@@ -196,46 +196,47 @@ namespace MvcSitemap.Controllers
         [HttpPost("UploadFiles")]
         public async Task<IActionResult> Post(IFormFile file)
         {
-            // full path to file in temp location
-           	var tempPath = Path.GetTempPath();
-           	var originalData = await _context.Sitemap.ToListAsync();
+			// full path to file in temp location
+			var tempPath = Path.GetTempPath();
+			var originalData = await _context.Sitemaps.ToListAsync();
 			var fileName = Guid.NewGuid().ToString() + ".xml";
 			var filePath = Path.Combine(tempPath, fileName);
 			Console.WriteLine($"filePath =========================> {filePath}");
-           
-            //Create A XML Document Of Response String  
-            XmlDocument xmlDocument = new XmlDocument();
 
-            //Read the XML File  
-            xmlDocument.Load("https://www.speedycash.com/sitemap.xml");
-            XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
-            nsmgr.AddNamespace("x", xmlDocument.DocumentElement.NamespaceURI);
+			//Create A XML Document Of Response String  
+			XmlDocument xmlDocument = new XmlDocument();
 
-            //Create a XML Node List with XPath Expression  
-            XmlNodeList xmlNodeList = xmlDocument.SelectNodes("/x:urlset/x:url", nsmgr);
+			//Read the XML File  
+			xmlDocument.Load("https://www.speedycash.com/sitemap.xml");
+			XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
+			nsmgr.AddNamespace("x", xmlDocument.DocumentElement.NamespaceURI);
 
-            List<XMLSitemap> infos = new List<XMLSitemap>();
-            foreach (XmlNode xmlNode in xmlNodeList)
-            {
-                XMLSitemap info = new XMLSitemap
-                {
-                    Url = xmlNode["loc"].InnerText,
-                    CreatedDate = new DateTime().ToString(),
-                    ModifiedDate = xmlNode["lastmod"].InnerText,
-                    ChangeFrequency = xmlNode["changefreq"].InnerText,
-                    Priority = xmlNode["priority"].InnerText,
-                    NoIndex = false,
-                    Status = "new"
-                };
-                infos.Add(info);
-            }
+			//Create a XML Node List with XPath Expression  
+			XmlNodeList xmlNodeList = xmlDocument.SelectNodes("/x:urlset/x:url", nsmgr);
 
+			List<Sitemap> infos = new List<Sitemap>();
+			foreach (XmlNode xmlNode in xmlNodeList)
+			{
+				Sitemap info = new Sitemap
+				{
+					Url = xmlNode["loc"].InnerText,
+					CreatedDate = new DateTime(),
+					ModifiedDate = DateTime.Parse(xmlNode["lastmod"].InnerText),
+					ChangeFrequency = xmlNode["changefreq"].InnerText,
+					Priority = Convert.ToDecimal(xmlNode["priority"].InnerText),
+					NoIndex = false,
+					Status = "new"
+				};
+				infos.Add(info);
+                _context.Sitemaps.Add(info);
+			}
+            await _context.SaveChangesAsync();
             // generate arrays of edited items, deleted items, and new items
             var deleteArray = originalData.Where(o => !infos.Any(i => o.Url == i.Url));
-            var editArray = infos.Where(o => originalData.Any(i => o.Url == i.Url));
-            var newArray = infos.Where(i => !originalData.Any(o => i.Url == o.Url));
+			var editArray = infos.Where(o => originalData.Any(i => o.Url == i.Url));
+			var newArray = infos.Where(i => !originalData.Any(o => i.Url == o.Url));
 
-            return Ok(new { xmlData = infos, newArray = newArray, editArray = editArray, deleteArray = deleteArray });
+			return Ok(new { xmlData = infos, newArray = newArray, editArray = editArray, deleteArray = deleteArray });
         }
     }
 }
