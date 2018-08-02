@@ -220,15 +220,18 @@ namespace MvcSitemap.Controllers
                 XMLSitemap info = new XMLSitemap
                 {
                     Url = xmlNode["loc"].InnerText,
-                    CreatedDate = xmlNode["lastmod"].InnerText,
+                    CreatedDate = new DateTime().ToString(),
+                    ModifiedDate = xmlNode["lastmod"].InnerText,
                     ChangeFrequency = xmlNode["changefreq"].InnerText,
                     Priority = xmlNode["priority"].InnerText,
+                    NoIndex = false,
                     Status = "new"
                 };
                 infos.Add(info);
             }
+
             // generate arrays of edited items, deleted items, and new items
-            var deleteArray = originalData.Where(o => infos.Any(i => o.Url == i.Url));
+            var deleteArray = originalData.Where(o => !infos.Any(i => o.Url == i.Url));
             var editArray = infos.Where(o => originalData.Any(i => o.Url == i.Url));
             var newArray = infos.Where(i => !originalData.Any(o => i.Url == o.Url));
 

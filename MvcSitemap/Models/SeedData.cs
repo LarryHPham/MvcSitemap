@@ -17,7 +17,7 @@ namespace MvcSitemap.Models
                 {
                     return;   // DB has been seeded
                 }
-                /*
+
                 context.Sitemap.AddRange(
                      new Sitemap
                      {
@@ -59,7 +59,7 @@ namespace MvcSitemap.Models
                        NoIndex = true
                    }
                 );
-                */
+
                 context.SaveChanges();
             }
         }
