@@ -35,3 +35,15 @@ body {
         display: none;
     }
 }
+
+.delete {
+    background-color: darkred;
+}
+
+.edit {
+    background-color: orange;
+}
+
+.new {
+    background-color: forestgreen;
+}
