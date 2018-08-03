@@ -114,6 +114,9 @@ namespace MvcSitemap.Controllers
                 return NotFound();
             }
             var sData = await _context.Sitemap.SingleOrDefaultAsync(s => s.ID == id);
+            Console.WriteLine($"sData =========================> {sData}");
+
+            sData.Status = "";
             if (await TryUpdateModelAsync<Sitemap>(
                 sData,
                 "",
@@ -197,7 +200,7 @@ namespace MvcSitemap.Controllers
         public async Task<IActionResult> Post(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                return Content("file not selected");
+                return null;
 
             // full path to file in temp location
             var tempPath = Path.GetTempPath();

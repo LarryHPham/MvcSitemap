@@ -10,8 +10,8 @@ using MvcSitemap.Models;
 namespace MvcSitemap.Migrations
 {
     [DbContext(typeof(MvcSitemapContext))]
-    [Migration("20180723015555_Inital")]
-    partial class Inital
+    [Migration("20180803063234_Sitemap")]
+    partial class Sitemap
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,6 +36,8 @@ namespace MvcSitemap.Migrations
                     b.Property<bool>("NoIndex");
 
                     b.Property<decimal>("Priority");
+
+                    b.Property<string>("Status");
 
                     b.Property<string>("Url");
 

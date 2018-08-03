@@ -35,6 +35,8 @@ namespace MvcSitemap.Migrations
 
                     b.Property<decimal>("Priority");
 
+                    b.Property<string>("Status");
+
                     b.Property<string>("Url");
 
                     b.HasKey("ID");

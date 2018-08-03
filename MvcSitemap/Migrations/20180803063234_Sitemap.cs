@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MvcSitemap.Migrations
 {
-    public partial class Inital : Migration
+    public partial class Sitemap : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,7 +19,8 @@ namespace MvcSitemap.Migrations
                     ModifiedDate = table.Column<DateTime>(nullable: false),
                     ChangeFrequency = table.Column<string>(nullable: true),
                     Priority = table.Column<decimal>(nullable: false),
-                    NoIndex = table.Column<bool>(nullable: false)
+                    NoIndex = table.Column<bool>(nullable: false),
+                    Status = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

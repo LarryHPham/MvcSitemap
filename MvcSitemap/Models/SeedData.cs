@@ -26,7 +26,8 @@ namespace MvcSitemap.Models
                          ModifiedDate = DateTime.Parse("1989-1-11"),
                          ChangeFrequency = "Yearly",
                          Priority = 1.0m,
-                         NoIndex = true
+                         NoIndex = true,
+                         Status = "new"
                      },
 
                      new Sitemap
@@ -36,7 +37,8 @@ namespace MvcSitemap.Models
                          ModifiedDate = DateTime.Parse("1984-3-13"),
                          ChangeFrequency = "Monthly",
                          Priority = 1.0m,
-                         NoIndex = false
+                         NoIndex = false,
+                         Status = "new"
                      },
 
                      new Sitemap
@@ -46,7 +48,8 @@ namespace MvcSitemap.Models
                          ModifiedDate = DateTime.Parse("1986-2-23"),
                          ChangeFrequency = "Daily",
                          Priority = 0.6m,
-                         NoIndex = false
+                         NoIndex = false,
+                         Status = "new"
                      },
 
                    new Sitemap
@@ -56,7 +59,8 @@ namespace MvcSitemap.Models
                        ModifiedDate = DateTime.Parse("1959-4-15"),
                        ChangeFrequency = "Yearly",
                        Priority = 0.6m,
-                       NoIndex = true
+                       NoIndex = true,
+                       Status = "new"
                    }
                 );
 

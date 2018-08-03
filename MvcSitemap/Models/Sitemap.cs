@@ -21,18 +21,6 @@ namespace MvcSitemap.Models
 		public decimal Priority { get; set; }
 		[Display(Name = "No Index, No Follow")]
 		public Boolean NoIndex { get; set; }
-		[NotMapped]
         public string Status { get;set; }
-    }
-
-    public class XMLSitemap
-    {
-        public string Url { get; set; }
-        public string CreatedDate { get; set; }
-        public string ModifiedDate { get; set; }
-        public string ChangeFrequency { get; set; }
-        public string Priority { get; set; }
-        public Boolean NoIndex { get; set; }
-        public string Status { get; set; }
     }
 }
