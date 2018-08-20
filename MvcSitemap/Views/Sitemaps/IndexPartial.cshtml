@@ -1,6 +1,12 @@
 @using Newtonsoft.Json;﻿
 @model IEnumerable<MvcSitemap.Models.Sitemap>
 
+<script>
+    var siteMapData= @Html.Raw(JsonConvert.SerializeObject(ViewBag.Data));
+    console.log(1, siteMapData);
+
+</script>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MvcSitemap.Models;
+using Newtonsoft.Json;
+
 
 namespace MvcSitemap.Controllers
 {
@@ -240,9 +242,9 @@ namespace MvcSitemap.Controllers
 					Status = "new"
 				};
 				infos.Add(info);
-                _context.Sitemap.Add(info);
+                // _context.Sitemap.Add(info);
 			}
-            await _context.SaveChangesAsync();
+            // await _context.SaveChangesAsync();
 
             // generate arrays of edited items, deleted items, and new items
             var deleteArray = originalData.Where(o => !infos.Any(i => o.Url == i.Url));
@@ -263,9 +265,20 @@ namespace MvcSitemap.Controllers
             var combinedArray = newArray.Concat(deleteArray);
             combinedArray = combinedArray.Concat(editArray);
 
-            ViewBag.Data = combinedArray;
+            ViewBag.Data = deleteArray;
 
-            return PartialView("IndexPartial", combinedArray);
+            ViewBag.Stuff = new MyDataInfo
+            {
+                Data = {
+                    one = deleteArray,
+                    two = editArray,
+                    three = newArray,
+                    four = combinedArray,
+                }
+            };
+
+            return PartialView("viewNew2");
         }
+
     }
 }

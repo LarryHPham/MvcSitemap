@@ -13,6 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Sitemaps\viewNew2.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Sitemaps\IndexPartial.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

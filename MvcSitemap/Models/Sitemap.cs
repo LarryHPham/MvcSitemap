@@ -16,11 +16,19 @@ namespace MvcSitemap.Models
 		public DateTime CreatedDate { get; set; }
 		[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true), Display(Name = "Modified Date")]
 		public DateTime ModifiedDate { get; set; }
-		[Display(Name = "Change Frequency")]
+        public DateTime TempModifiedDate { get; set; }
+        [Display(Name = "Change Frequency")]
 		public string ChangeFrequency { get; set; }
-		public decimal Priority { get; set; }
-		[Display(Name = "No Index, No Follow")]
+        public string TempChangeFrequency { get; set; }
+        public decimal Priority { get; set; }
+        public decimal TempPriority { get; set; }
+        [Display(Name = "No Index, No Follow")]
 		public Boolean NoIndex { get; set; }
         public string Status { get;set; }
+    }
+
+    public class MyDataInfo
+    {
+        public dynamic Data { get; set; }
     }
 }
