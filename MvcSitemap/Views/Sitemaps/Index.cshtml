@@ -1,12 +1,28 @@
 @using Newtonsoft.Json;
 @model IEnumerable<MvcSitemap.Models.Sitemap>
-
 @{
     ViewData["Title"] = "Index";
 }
-
-<h2>Index</h2>
-
-<div id="indexPartial">
-<partial name="IndexPartial">
+<script>
+    var siteMap = @Html.Raw(JsonConvert.SerializeObject(Model));
+</script>
+<div class="container-fluid">
+    <div class="row justify-content-between">
+        <form id="uploadForm" method="post" enctype="multipart/form-data" asp-controller="Sitemaps" asp-action="UploadFiles" class="col-sm-12 col-md-6">
+            <div class="form-group">
+                <div class="file btn btn-default">
+                    <input id="fileChooser" type="file" name="files" multiple accept=".xml" />
+                </div>
+                <button type="submit" data-role="button" class="btn btn-primary" data-redeemed-text="Update" data-loading-text="Saving..." data-saved-text="Saved!" autocomplete="off"><i class="fa fa-upload"></i> Upload XML File</button>
+                <button type="reset" data-role="button" class="btn btn-outline-secondary" autocomplete="off">Cancel</button>
+            </div>
+        </form>
+        @*NEED EXPORT TO XML*@
+        <div><a asp-controller="Sitemaps" asp-action="Sitemap.xml" class="btn btn-warning col-12" data-target="#modal-edit-bulk" data-toggle="modal" id="edit-bulk-post"><i class="fa fa-file"></i> Export XML</a></div>
+        @*Sitemap Table*@
+        <div id="indexPartial">
+            <!-- @Html.Partial("~/Views/Sitemaps/IndexPartial.cshtml", Model); -->
+            <partial name="IndexPartial">
+        </div>
+    </div>
 </div>

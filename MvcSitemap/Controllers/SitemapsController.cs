@@ -198,87 +198,92 @@ namespace MvcSitemap.Controllers
             return _context.Sitemap.Any(e => e.ID == id);
         }
 
-        [HttpPost("UploadFiles")]
-        public async Task<IActionResult> Post(IFormFile file)
+        [HttpPost("[action]")]
+        public async Task<IActionResult> UploadFiles(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                return null;
-
-            // full path to file in temp location
-            var tempPath = Path.GetTempPath();
-			var originalData = await _context.Sitemap.ToListAsync();
-			var fileName = Guid.NewGuid().ToString() + ".xml";
-			var filePath = Path.Combine(tempPath, fileName);
-            Console.WriteLine($"filePath =========================> {filePath}");
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+                return Content("file not selected");
+            try
             {
-                await file.CopyToAsync(stream);
-            }
-
-
-            //Create A XML Document Of Response String  
-            XmlDocument xmlDocument = new XmlDocument();
-
-			//Read the XML File  
-			xmlDocument.Load(filePath);
-			XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
-            nsmgr.AddNamespace("x", xmlDocument.DocumentElement.NamespaceURI);
-
-            //Create a XML Node List with XPath Expression  
-            XmlNodeList xmlNodeList = xmlDocument.SelectNodes("/x:urlset/x:url", nsmgr);
-
-			List<Sitemap> infos = new List<Sitemap>();
-			foreach (XmlNode xmlNode in xmlNodeList)
-			{
-				Sitemap info = new Sitemap
-				{
-					Url = xmlNode["loc"].InnerText,
-					CreatedDate = new DateTime(),
-					ModifiedDate = DateTime.Parse(xmlNode["lastmod"].InnerText),
-					ChangeFrequency = xmlNode["changefreq"].InnerText,
-					Priority = Convert.ToDecimal(xmlNode["priority"].InnerText),
-					NoIndex = false,
-					Status = "new"
-				};
-				infos.Add(info);
-                // _context.Sitemap.Add(info);
-			}
-            // await _context.SaveChangesAsync();
-
-            // generate arrays of edited items, deleted items, and new items
-            var deleteArray = originalData.Where(o => !infos.Any(i => o.Url == i.Url));
-            // below is inefficient
-            foreach(Sitemap d in deleteArray)
-            {
-                d.Status = "delete";
-            }
-
-			var editArray = infos.Where(o => originalData.Any(i => o.Url == i.Url));
-            foreach (Sitemap d in editArray)
-            {
-                d.Status = "edit";
-            }
-
-            var newArray = infos.Where(i => !originalData.Any(o => i.Url == o.Url));
-
-            var combinedArray = newArray.Concat(deleteArray);
-            combinedArray = combinedArray.Concat(editArray);
-
-            ViewBag.Data = deleteArray;
-
-            ViewBag.Stuff = new MyDataInfo
-            {
-                Data = {
-                    one = deleteArray,
-                    two = editArray,
-                    three = newArray,
-                    four = combinedArray,
+                // full path to file in temp location
+                var tempPath = Path.GetTempPath();
+                var originalData = await _context.Sitemap.ToListAsync();
+                var fileName = Guid.NewGuid().ToString() + ".xml";
+                var filePath = Path.Combine(tempPath, fileName);
+                long size = file.Length;
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
                 }
-            };
 
-            return PartialView("viewNew2");
-        }
+                //Create A XML Document Of Response String  
+                XmlDocument xmlDocument = new XmlDocument();
+
+                //Read the XML File  
+                xmlDocument.Load(filePath);
+                XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDocument.NameTable);
+                nsmgr.AddNamespace("x", xmlDocument.DocumentElement.NamespaceURI);
+
+                //Create a XML Node List with XPath Expression  
+                XmlNodeList xmlNodeList = xmlDocument.SelectNodes("/x:urlset/x:url", nsmgr);
+
+                List<Sitemap> infos = new List<Sitemap>();
+                foreach (XmlNode xmlNode in xmlNodeList)
+                {
+                    var checkUrl = xmlNode["loc"].InnerText.Replace(" ", "");
+                    bool endIsSlash = checkUrl.EndsWith("/");
+                    checkUrl = endIsSlash ? checkUrl : checkUrl + "/";
+                    Sitemap info = new Sitemap
+                    {
+                        Url = checkUrl,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Parse(xmlNode["lastmod"].InnerText),
+                        ChangeFrequency = xmlNode["changefreq"].InnerText,
+                        Priority = Convert.ToDecimal(xmlNode["priority"].InnerText),
+                        NoIndex = false,
+                        Status = "new"
+                    };
+                    infos.Add(info);
+                }
+                var newArray = infos.Where(i => !originalData.Any(o => i.Url == o.Url));// add new item(s)
+                foreach (Sitemap d in newArray)
+                {
+                    _context.Sitemap.Add(d);
+                }
+
+                // generate arrays of edited items, deleted items, and new items		
+                var deleteArray = originalData.Where(o => !infos.Any(i => o.Url == i.Url));// delete if exist in old but not in new file
+                foreach (Sitemap d in deleteArray)
+                {
+                    _context.Sitemap.Remove(d);
+                    d.Status = "delete";
+                }
+
+                var editArray = infos.Where(o => originalData.Any(i => o.Url == i.Url));// matches found, keep original
+                foreach (Sitemap d in editArray)
+                {
+                    d.Status = "edit";
+                    var oData = _context.Sitemap.SingleOrDefault(i => i.Url == d.Url);
+                    if (oData != null)
+                    {
+                        oData.ModifiedDate = d.ModifiedDate;
+                    }
+                }
+
+                var combinedArray = newArray.Concat(deleteArray);
+                combinedArray = combinedArray.Concat(editArray);
+                ViewBag.Data = combinedArray;
+                ViewData["uploadCheck"] = true;
+                await _context.SaveChangesAsync();
+                //return Json(new { html = _ViewRender.Render("Sitemaps/IndexPartial", combinedArray), data = combinedArray });
+                return PartialView("IndexPartial", combinedArray);
+            }
+            catch (DbUpdateException /* ex */)
+            {
+                return RedirectToAction(nameof(Index));
+
+            }
+        }// end uploadfile post func.
 
     }
 }
